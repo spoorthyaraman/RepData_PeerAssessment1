@@ -15,6 +15,11 @@ dt <- read.table("activity.csv", sep =",", header = TRUE)
 mean_day <- aggregate(dt[,1], list(dt$date), sum)
 ```
 ###Histogram of the total number of steps taken each day
+
+```r
+hist(mean_day$x, main = "Histogram of the total number of steps taken each day", xlab="Steps per day",col="orange")
+```
+
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ###Mean and median of the total number of steps taken per day
@@ -37,6 +42,12 @@ median(mean_day$x,na.rm=TRUE)
 
 ## What is the average daily activity pattern?
 ###A time series plot of the 5-minute interval and the average number of steps taken, averaged across all days
+
+```r
+intm <- aggregate(dt[,1], by=list(dt$interval), FUN=mean, na.rm=TRUE)
+plot(intm$Group.1,intm$x,type="l", main="Time Series Plot of the intervals and the average number of steps", xlab="Intervals", ylab="Average number of steps",col="pink")
+```
+
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 ###The 5-minute interval, on average across all the days in the dataset, containing the maximum number of steps
@@ -75,6 +86,12 @@ d <- mutate(dtf, steps = replace(dtf$steps, is.na(dtf$steps), intm$x))
 ```
 
 ###Histogram of the total number of steps taken each day
+
+```r
+d_f <- aggregate(d[,1], list(d$date), sum, rm.na=TRUE)
+hist(d_f$x, main = "Histogram of the total number of steps taken each day", xlab="Steps per Day",col="brown")
+```
+
 ![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
 
 ###Mean and median of the total number of steps taken per day
@@ -113,4 +130,11 @@ intm_weekend <- aggregate(d_weekend[,1], by=list(d_weekend$interval), FUN=mean)
 ```
 
 ###Time series plot of the differences in activities on the weekdays and the weekends
+
+```r
+par(mfrow=c(2,1),mar=c(4,4,2,2))
+plot(intm_weekday$Group.1,intm_weekday$x,type="l", main="Weekdays",xlab="",ylab="",col="blue")
+plot(intm_weekend$Group.1,intm_weekend$x,type="l", main="Weekends", xlab="Intervals", ylab="Average number of steps",col="red")
+```
+
 ![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
